@@ -273,10 +273,14 @@ export const Tabs = ({ tabs, cur, set }) => (
         <button key={k} className={on ? 'on' : ''} onClick={() => set(k)}>
           <i className="tb-icon">
             {icon
-              ? <span style={{ width:24, height:24, display:'flex', alignItems:'center', justifyContent:'center' }}>
-                  {React.cloneElement(icon, { width:22, height:22, stroke: on ? '#3cb371' : 'currentColor', strokeWidth: on ? 2.2 : 1.8 })}
+              ? <span style={{ width:22, height:22, display:'flex', alignItems:'center', justifyContent:'center' }}>
+                  {React.cloneElement(icon, {
+                    width: 20, height: 20,
+                    stroke: on ? '#ffffff' : 'currentColor',
+                    strokeWidth: on ? 2.2 : 1.8
+                  })}
                 </span>
-              : <span style={{ fontSize:20 }}>{['🧾','➕','🔗','💰','🪑','💵','🍳','🚫','📋','🌡️','📦','🛒','🍱','⇄','📥','🤝','🗑️','📊','👥','✅','🛡️','🏭','📑','🚚','🔍','💼','📈','🏠','🏆'][['orders','new','link','earn','floor','cash','tickets','86','prep','haccp','stock','retail','finished','transfers','receiving','procurement','waste','overview','reconciliation','checklists','audit','batches','boms','requisitions','traceability','pnl','kpis','sites','waiters'].indexOf(k)] || '●'}</span>
+              : <span style={{ fontSize:18 }}>{['🧾','➕','🔗','💰','🪑','💵','🍳','🚫','📋','🌡️','📦','🛒','🍱','⇄','📥','🤝','🗑️','📊','👥','✅','🛡️','🏭','📑','🚚','🔍','💼','📈','🏠','🏆'][['orders','new','link','earn','floor','cash','tickets','86','prep','haccp','stock','retail','finished','transfers','receiving','procurement','waste','overview','reconciliation','checklists','audit','batches','boms','requisitions','traceability','pnl','kpis','sites','waiters'].indexOf(k)] || '●'}</span>
             }
           </i>
           {l}
@@ -451,22 +455,24 @@ export function TableMap({ val, set, big }) {
 
   return (
     <div style={{
-      background:'#0f1117', borderRadius:20, padding: big?'20px 20px 16px':'14px 14px 12px',
-      margin:'6px 0', color:'#fff', boxShadow:'0 4px 32px rgba(0,0,0,.35)'
+      background:'#f0fdf4',
+      border:'1px solid #bbf7d0',
+      borderRadius:20, padding: big?'20px 20px 16px':'14px 14px 12px',
+      margin:'6px 0', boxShadow:'0 2px 16px rgba(60,179,113,.1)'
     }}>
       {/* header */}
       <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom: big?16:12 }}>
         <div>
-          <div style={{ fontWeight:800, fontSize: big?20:17, letterSpacing:-.3 }}>Interactive Floor Plan</div>
+          <div style={{ fontWeight:800, fontSize: big?20:17, letterSpacing:-.3, color:'#14532d' }}>Interactive Floor Plan</div>
           <div style={{ fontSize:11, color:'#6b7280', marginTop:2 }}>
             {tables.filter(t => liveOrders(t).length).length} active tables · tap to select
           </div>
         </div>
         <div style={{ fontSize:11, color:'#6b7280', textAlign:'right' }}>
-          <div style={{ fontWeight:600, color: twOrds?'#f59e0b':'#6b7280' }}>
+          <div style={{ fontWeight:600, color: twOrds?'#d97706':'#9ca3af' }}>
             {twOrds ? `${twOrds} takeaway` : 'No takeaway'}
           </div>
-          {twOrds > 0 && <div style={{ color:'#10b981', fontWeight:700 }}>{fmt(twAmt)}</div>}
+          {twOrds > 0 && <div style={{ color:'#16a34a', fontWeight:700 }}>{fmt(twAmt)}</div>}
         </div>
       </div>
 
@@ -490,12 +496,16 @@ export function TableMap({ val, set, big }) {
           const elapsed_m = time ? Math.floor((Date.now() - time) / 60000) : 0;
           const isLate = elapsed_m > 30 && ds && !['served','paid'].includes(ds);
 
-          /* colour scheme */
-          const ringColor  = sel ? '#f97316' : busy ? cfg?.ring || '#f59e0b' : '#2d2f38';
-          const bgColor    = sel ? 'linear-gradient(145deg,#ff6b2c,#f97316)' :
-                             busy ? `linear-gradient(145deg,${cfg?.ring}22,${cfg?.ring}11)` :
-                             'linear-gradient(145deg,#1e2028,#252831)';
-          const chairColor = sel ? '#ffb27a' : busy ? cfg?.ring || '#f59e0b' : '#2d3148';
+          /* colour scheme — light palette */
+          const ringColor  = sel ? '#3cb371' : busy ? cfg?.ring || '#f59e0b' : '#d1fae5';
+          const bgColor    = sel
+            ? 'linear-gradient(145deg,#3cb371,#2a9d5c)'
+            : busy
+            ? '#ffffff'
+            : '#f9fafb';
+          const textColor  = sel ? '#fff' : '#111827';
+          const mutedColor = sel ? 'rgba(255,255,255,.75)' : '#6b7280';
+          const chairColor = sel ? '#a7f3d0' : busy ? cfg?.ring || '#f59e0b' : '#bbf7d0';
 
           return (
             <button
@@ -518,35 +528,44 @@ export function TableMap({ val, set, big }) {
                 borderRadius:14,
                 border:`2px solid ${ringColor}`,
                 boxShadow: sel
-                  ? '0 0 20px rgba(249,115,22,.6)'
+                  ? '0 4px 18px rgba(60,179,113,.4)'
                   : busy
-                  ? `0 0 14px ${cfg?.ring}55`
-                  : 'none',
+                  ? `0 2px 12px ${cfg?.ring}33`
+                  : '0 1px 4px rgba(0,0,0,.06)',
                 padding: big?'10px 10px':'7px 8px',
                 display:'flex', flexDirection:'column', justifyContent:'space-between',
                 transition:'all .18s ease', position:'relative', overflow:'hidden',
               }}>
+                {/* left accent bar when busy */}
+                {busy && !sel && (
+                  <div style={{
+                    position:'absolute', left:0, top:0, bottom:0,
+                    width:4, borderRadius:'14px 0 0 14px',
+                    background: cfg?.ring || '#f59e0b'
+                  }}/>
+                )}
+
                 {/* status dot */}
                 {busy && (
                   <div style={{
                     position:'absolute', top:7, right:7,
                     width:8, height:8, borderRadius:'50%',
-                    background: cfg?.dot || '#f59e0b',
-                    boxShadow:`0 0 6px ${cfg?.dot || '#f59e0b'}`,
+                    background: sel ? '#fff' : cfg?.dot || '#f59e0b',
+                    boxShadow:`0 0 6px ${sel ? '#fff' : cfg?.dot || '#f59e0b'}`,
                     animation: ds==='preparing'||ds==='ready' ? 'pulse 1.4s infinite' : 'none'
                   }}/>
                 )}
 
                 {/* table label */}
                 <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center' }}>
-                  <div style={{ fontWeight:800, fontSize: big?22:17, color:'#fff', lineHeight:1 }}>{t}</div>
+                  <div style={{ fontWeight:800, fontSize: big?22:17, color: textColor, lineHeight:1 }}>{t}</div>
                   {busy && cfg && (
                     <span style={{ fontSize: big?14:11 }}>{cfg.icon}</span>
                   )}
                 </div>
 
                 {/* seat count */}
-                <div style={{ fontSize: big?11:10, color: busy?cfg?.ring:'#6b7280', fontWeight:600, marginTop:2 }}>
+                <div style={{ fontSize: big?11:10, color: sel ? 'rgba(255,255,255,.8)' : busy ? cfg?.ring : '#9ca3af', fontWeight:600, marginTop:2 }}>
                   {n} seats
                 </div>
 
@@ -555,8 +574,8 @@ export function TableMap({ val, set, big }) {
                   <div style={{ marginTop: big?6:4 }}>
                     {/* status badge */}
                     <div style={{
-                      background: cfg?.bg || '#1e2028',
-                      color: cfg?.color || '#f59e0b',
+                      background: sel ? 'rgba(255,255,255,.2)' : cfg?.bg || '#f3f4f6',
+                      color: sel ? '#fff' : cfg?.color || '#f59e0b',
                       borderRadius:6, padding:'2px 6px',
                       fontSize: big?11:9, fontWeight:700,
                       display:'inline-block', marginBottom: big?4:2,
@@ -565,29 +584,29 @@ export function TableMap({ val, set, big }) {
                       {cfg?.label || ds}
                     </div>
                     {/* amount */}
-                    <div style={{ fontSize: big?13:11, fontWeight:800, color:'#fff', marginTop:1 }}>
+                    <div style={{ fontSize: big?13:11, fontWeight:800, color: sel ? '#fff' : '#111827', marginTop:1 }}>
                       {fmt(am)}
                     </div>
                     {/* bottom row: time + waiter */}
                     <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginTop: big?4:2 }}>
-                      <span style={{ fontSize: big?10:9, color: isLate?'#ef4444':'#9ca3af', fontWeight: isLate?700:400 }}>
+                      <span style={{ fontSize: big?10:9, color: isLate?'#ef4444': sel ? 'rgba(255,255,255,.7)' : '#9ca3af', fontWeight: isLate?700:400 }}>
                         {isLate ? '⚠ ' : '⏱ '}{elapsed(time)}
                       </span>
                       {wtr && (
-                        <span style={{ fontSize: big?10:9, color:'#9ca3af', maxWidth:50, overflow:'hidden', whiteSpace:'nowrap', textOverflow:'ellipsis' }}>
+                        <span style={{ fontSize: big?10:9, color: sel ? 'rgba(255,255,255,.7)' : '#9ca3af', maxWidth:50, overflow:'hidden', whiteSpace:'nowrap', textOverflow:'ellipsis' }}>
                           {wtr}
                         </span>
                       )}
                     </div>
                     {/* order count */}
                     {ords.length > 1 && (
-                      <div style={{ fontSize:9, color:'#6b7280', marginTop:1 }}>
+                      <div style={{ fontSize:9, color: sel ? 'rgba(255,255,255,.6)' : '#9ca3af', marginTop:1 }}>
                         {ords.length} active tickets
                       </div>
                     )}
                   </div>
                 ) : (
-                  <div style={{ fontSize: big?12:10, color:'#4a4c55', marginTop: big?6:4, fontWeight:500 }}>
+                  <div style={{ fontSize: big?12:10, color: mutedColor, marginTop: big?6:4, fontWeight:500 }}>
                     Free · available
                   </div>
                 )}
@@ -607,22 +626,23 @@ export function TableMap({ val, set, big }) {
         style={{
           width:'100%',
           background: val==='Takeaway'
-            ? 'linear-gradient(135deg,#ff9a3c,#ff5a2c)'
+            ? 'linear-gradient(135deg,#3cb371,#2a9d5c)'
             : twOrds > 0
-            ? 'rgba(249,115,22,.12)'
-            : 'transparent',
-          border: `1.5px ${val==='Takeaway'?'solid #f97316':'dashed #2d3148'}`,
+            ? 'rgba(60,179,113,.08)'
+            : 'rgba(0,0,0,.03)',
+          border: `1.5px ${val==='Takeaway' ? 'solid #3cb371' : twOrds > 0 ? 'solid #bbf7d0' : 'dashed #d1fae5'}`,
           borderRadius:14, padding: big?'12px 16px':'9px 14px',
-          color:'#fff', fontWeight:700, cursor:'pointer',
+          color: val==='Takeaway' ? '#fff' : '#374151', fontWeight:700, cursor:'pointer',
           display:'flex', alignItems:'center', justifyContent:'space-between',
-          fontSize: big?14:13, transition:'all .15s'
+          fontSize: big?14:13, transition:'all .15s',
+          boxShadow: val==='Takeaway' ? '0 4px 12px rgba(60,179,113,.3)' : 'none'
         }}
       >
         <span>🛍️ Takeaway / Bar Tab (No Table)</span>
         {twOrds > 0 && (
           <span style={{ display:'flex', alignItems:'center', gap:8 }}>
-            <span style={{ background:'#ef4444', borderRadius:10, padding:'1px 7px', fontSize:11, fontWeight:700 }}>{twOrds}</span>
-            <span style={{ color:'#10b981', fontWeight:800 }}>{fmt(twAmt)}</span>
+            <span style={{ background:'#ef4444', borderRadius:10, padding:'1px 7px', fontSize:11, fontWeight:700, color:'#fff' }}>{twOrds}</span>
+            <span style={{ color: val==='Takeaway'?'#fff':'#16a34a', fontWeight:800 }}>{fmt(twAmt)}</span>
           </span>
         )}
       </button>
@@ -631,7 +651,7 @@ export function TableMap({ val, set, big }) {
       <div style={{ display:'flex', gap:12, marginTop:14, flexWrap:'wrap' }}>
         {LEGEND.map(l => (
           <div key={l.label} style={{ display:'flex', alignItems:'center', gap:5, fontSize:11, color:'#6b7280' }}>
-            <div style={{ width:8, height:8, borderRadius:'50%', background:l.color, boxShadow:`0 0 4px ${l.color}` }}/>
+            <div style={{ width:8, height:8, borderRadius:'50%', background:l.color, boxShadow:`0 0 4px ${l.color}80` }}/>
             <span>{l.label}</span>
           </div>
         ))}

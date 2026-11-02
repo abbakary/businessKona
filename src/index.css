@@ -110,12 +110,13 @@ div.app.wide{max-width:1600px}.dash{display:grid;gap:20px;align-items:start}.fl{
 .tms-role-badge{display:inline-flex;align-items:center;gap:5px;border-radius:99px;padding:5px 11px;font-size:12px;font-weight:700;line-height:1}
 
 /* ── Bottom nav (mobile) ── */
-.tb{position:fixed;left:0;right:0;bottom:0;display:flex;justify-content:center;gap:0;background:color-mix(in srgb,var(--card) 88%,transparent);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-top:1px solid var(--line);padding:4px 4px calc(4px + env(safe-area-inset-bottom,0px));z-index:20}
-.tb button{flex:1;max-width:110px;color:var(--mut);font-size:10px;font-weight:500;display:flex;flex-direction:column;align-items:center;gap:3px;padding:5px 2px;border-radius:12px;transition:all .15s;position:relative;line-height:1.2}
-.tb-icon{display:flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:9px;transition:all .15s}
-.tb button.on{color:var(--nav);font-weight:700}
-.tb button.on .tb-icon{background:rgba(60,179,113,.14)}
-.tb u{position:absolute;top:2px;right:calc(50% - 22px);background:#ef4444;color:#fff;text-decoration:none;font-size:10px;font-weight:700;border-radius:99px;padding:1px 5px;min-width:16px;text-align:center}
+.tb{position:fixed;left:0;right:0;bottom:0;display:flex;justify-content:center;gap:0;background:color-mix(in srgb,var(--card) 94%,transparent);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-top:1px solid var(--line);padding:6px 4px calc(6px + env(safe-area-inset-bottom,0px));z-index:20}
+.tb button{flex:1;max-width:110px;color:var(--mut);font-size:10px;font-weight:500;display:flex;flex-direction:column;align-items:center;gap:4px;padding:5px 2px;border-radius:14px;transition:all .18s;position:relative;line-height:1.2;background:none;border:none}
+.tb-icon{display:flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:10px;transition:all .18s;background:transparent}
+.tb button.on{color:#3cb371;font-weight:700}
+.tb button.on .tb-icon{background:#3cb371;box-shadow:0 3px 10px rgba(60,179,113,.38)}
+.tb button.on .tb-icon svg{stroke:#fff}
+.tb u{position:absolute;top:0px;right:calc(50% - 24px);background:#ef4444;color:#fff;text-decoration:none;font-size:10px;font-weight:700;border-radius:99px;padding:1px 5px;min-width:16px;text-align:center}
 
 /* ── Desktop sidebar nav (≥900px, wide screens) ── */
 @media(min-width:900px){
